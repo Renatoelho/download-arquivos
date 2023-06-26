@@ -1,102 +1,73 @@
 
-#pip install requests beautifulsoup4
-
-
-import requests
-from bs4 import BeautifulSoup
-
-# URL da página que você deseja extrair os links
-url = "http://www.example.com"
-
-# Faz a requisição HTTP para obter o conteúdo da página
-response = requests.get(url)
-
-# Verifica se a requisição foi bem-sucedida
-if response.status_code == 200:
-    # Cria um objeto BeautifulSoup para analisar o conteúdo HTML
-    soup = BeautifulSoup(response.content, "html.parser")
-    
-    # Encontra todos os elementos <a> (links) na página
-    links = soup.find_all("a")
-    
-    # Itera sobre os links encontrados e exibe suas URLs
-    for link in links:
-        print(link.get("href"))
-else:
-    print("Falha ao acessar a página:", response.status_code)
-
-
+from urllib.parse import urlparse
 
 import requests
 from bs4 import BeautifulSoup
 
-# URL da página que você deseja extrair os links
-url = "http://www.example.com"
 
-# Faz a requisição HTTP para obter o conteúdo da página
-response = requests.get(url)
-
-# Verifica se a requisição foi bem-sucedida
-if response.status_code == 200:
-    # Cria um objeto BeautifulSoup para analisar o conteúdo HTML
-    soup = BeautifulSoup(response.content, "html.parser")
-    
-    # Encontra todos os elementos <a> (links) na página
-    links_a = soup.find_all("a")
-    
-    # Itera sobre os links encontrados e exibe suas URLs
-    for link in links_a:
-        print(link.get("href"))
-    
-    # Encontra todos os elementos <link> na página
-    links_link = soup.find_all("link")
-    
-    # Itera sobre os links encontrados e exibe suas URLs
-    for link in links_link:
-        print(link.get("href"))
-    
-    # Encontra todos os elementos <script> na página
-    links_script = soup.find_all("script")
-    
-    # Itera sobre os links encontrados e exibe suas URLs
-    for link in links_script:
-        print(link.get("src"))
-    
-    # Encontra todos os elementos <img> na página
-    links_img = soup.find_all("img")
-    
-    # Itera sobre os links encontrados e exibe suas URLs
-    for link in links_img:
-        print(link.get("src"))
-        
-    # Adicione outros elementos HTML, se necessário
-    
-else:
-    print("Falha ao acessar a página:", response.status_code)
+def _remove_extensoes_indesejadas(
+        lista_arquivos: list,
+        extensoes: list
+    ) -> list:
+    return list(
+        filter(
+            lambda item:
+            any(str(item)
+                .endswith(extensao)
+                for extensao
+                in extensoes
+            ),
+            lista_arquivos
+        )
+    )
 
 
-import requests
-from bs4 import BeautifulSoup
+def _reestrutura_url_arquivos(url_pagina: str, url_arquivos: list):
+    estrutura_url_pagina = urlparse(url_pagina)
 
-# URL da página que você deseja extrair os links
-url = "http://www.example.com"
-
-# Faz a requisição HTTP para obter o conteúdo da página
-response = requests.get(url)
-
-# Verifica se a requisição foi bem-sucedida
-if response.status_code == 200:
-    # Cria um objeto BeautifulSoup para analisar o conteúdo HTML
-    soup = BeautifulSoup(response.content, "html.parser")
+    def _atualiza_url_arquivo(url_arquivos, valida_url_arquivo):
+        return list(map(valida_url_arquivo, url_arquivos))
     
-    # Encontra todos os elementos <a> (links) na página
-    links = soup.find_all("a")
-    
-    # Itera sobre os links encontrados
-    for link in links:
-        href = link.get("href")
-        # Verifica se o link se refere a um arquivo de imagem
-        if href.endswith((".jpg", ".jpeg", ".png", ".gif")):
-            print(href)
-else:
-    print("Falha ao acessar a página:", response.status_code)
+    def _valida_url_arquivo(url_arquivo):
+        estrutura_url_arquivo = urlparse(url_arquivo)
+        if len(str(estrutura_url_arquivo.netloc)) == 0:
+            return str(estrutura_url_pagina.scheme) + "://" + str(estrutura_url_pagina.netloc) + str(estrutura_url_arquivo.path)
+        else:
+            return url_arquivo
+
+    return _atualiza_url_arquivo(url_arquivos, _valida_url_arquivo)
+
+   
+def captura_links_arquivos_pagina(
+        url: str,
+        tipo_arquivo:list=[".csv", ".txt", ".xls", ".xlsx", ".pdf"]
+    ) -> dict:
+    try:
+        response = requests.get(url)
+        if response.status_code == 200:
+            soup = BeautifulSoup(response.content, "html.parser")
+            tags_para_pesquisar = (
+                {
+                    "a": "href",
+                    "link": "href",
+                    "script": "src",
+                    "img": "src"
+                }
+            )
+            links_encontrados = []
+            for tag, elemento in tags_para_pesquisar.items():
+                links_temp = soup.find_all(tag)
+                for link in links_temp:
+                    links_encontrados.append(link.get(elemento))
+            links_encontrados = _remove_extensoes_indesejadas(list(set(links_encontrados)), tipo_arquivo)
+            links_encontrados = _reestrutura_url_arquivos(url, links_encontrados)
+            assert len(links_encontrados) > 0, "Não tem arquivos p/ download."
+        return {"status": True, "arquivos": links_encontrados}
+    except Exception as erro:
+        return {"status": False, "mensagem": str(erro)}
+
+
+if __name__ == "__main__":
+    url = "https://findthisip.com/"
+    url = "https://transparencia.infraero.gov.br/concessao-de-uso-de-areas/"
+    print(captura_links_arquivos_pagina(url))
