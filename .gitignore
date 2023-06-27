@@ -1,3 +1,5 @@
 /**/__pycache__
 /**/.venv
-/**/downloads
+/**/pep8
+/**/downloads/*
+!/**/downloads/.gitkeep
