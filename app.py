@@ -4,7 +4,6 @@ from utils.baixa_arquivos_pagina import baixa_arquivos_pagina
 
 
 url_pagina = "https://www.gov.br/ans/pt-br/acesso-a-informacao/perfil-do-setor/dados-abertos-1/dados-abertos"
-url_pagina = "https://findthisip.com/"
 
 if __name__ == "__main__":
     arquivos_pagina = (
