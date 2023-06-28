@@ -3,18 +3,22 @@ from utils.captura_links_pagina import captura_links_arquivos_pagina
 from utils.baixa_arquivos_pagina import baixa_arquivos_pagina
 
 
-url_pagina = "https://transparencia.infraero.gov.br/concessao-de-uso-de-areas/"
+url_pagina = "https://www.gov.br/ans/pt-br/acesso-a-informacao/perfil-do-setor/dados-abertos-1/dados-abertos"
 url_pagina = "https://findthisip.com/"
 
 if __name__ == "__main__":
-    arquivos_pagina = captura_links_arquivos_pagina(url_pagina)
+    arquivos_pagina = (
+        captura_links_arquivos_pagina(url_pagina, extensoes=[".pdf"])
+    )
+
     if arquivos_pagina["status"]:
-        for url_arquivo in arquivos_pagina["arquivos"]:
+        for index, url_arquivo in enumerate(arquivos_pagina["arquivos"]):
             download = baixa_arquivos_pagina(url_arquivo)
+
             if download["status"]:
-                print("Arquivo baixado com sucesso!!!")
+                print(f"{index + 1}º Arquivo baixado com sucesso!!!")
             else:
-                print("Ocorreu algum erro ao baixar o arquivo...")
+                print(f"{index + 1}º Arquivo não foi baixado...")
                 print(download)
     else:
         print(arquivos_pagina)

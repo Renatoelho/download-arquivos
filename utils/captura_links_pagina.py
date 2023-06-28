@@ -42,15 +42,31 @@ def _reestrutura_urls_relativas(url_pagina: str, url_arquivos: list):
         else:
             return url_arquivo
 
-    return _atualiza_urls_arquivos(url_arquivos, _adiciona_protocolo_dominio)
+    return _atualiza_urls_arquivos(
+        url_arquivos,
+        _adiciona_protocolo_dominio
+    )
 
 
 def captura_links_arquivos_pagina(
         url: str,
-        tipo_arquivo: list = [".csv", ".txt", ".xls", ".xlsx", ".pdf"]
+        extensoes: list = [".csv", ".txt", ".xls", ".xlsx"]
 ) -> dict:
+    """
+    Para escolher outras extensões ou reduzir a
+    quantidade é necessário enviar uma nova lista
+    para o parâmetro 'extensoes'.
+
+    Exemplo de redução de extensões:
+        [".csv", ".txt"]
+
+    Exemplo de novas extensões:
+        [".waw", ".mp3", ".mp4"]
+
+    """
     try:
         response = requests.get(url, headers=cabecalho())
+
         if response.status_code == 200:
             soup = BeautifulSoup(response.content, "html.parser")
             tags_para_pesquisar = (
@@ -61,26 +77,34 @@ def captura_links_arquivos_pagina(
                     "img": "src"
                 }
             )
-            links_encontrados = []
+
+            links_pagina = []
+
             for tag, elemento in tags_para_pesquisar.items():
                 links_temp = soup.find_all(tag)
                 for link in links_temp:
-                    links_encontrados.append(link.get(elemento))
-            links_encontrados = (
+                    links_pagina.append(link.get(elemento))
+
+            links_arquivos = (
                 _remove_extensoes_indesejadas(
-                    list(set(links_encontrados)),
-                    tipo_arquivo
+                    list(set(links_pagina)),
+                    extensoes
                 )
             )
-            links_encontrados = (
-                _reestrutura_urls_relativas(url, links_encontrados)
+
+            links_arquivos = (
+                _reestrutura_urls_relativas(url, links_arquivos)
             )
-            assert len(links_encontrados) > 0, "Não tem arquivos p/ download."
-        return {"status": True, "arquivos": links_encontrados}
+
+            assert len(links_arquivos) > 0, "Não tem arquivo(s) p/ baixar."
+
+        return {"status": True, "arquivos": links_arquivos}
+
     except Exception as erro:
         return {"status": False, "mensagem": str(erro)}
 
 
 if __name__ == "__main__":
     url = "https://..../"
+
     print(captura_links_arquivos_pagina(url))

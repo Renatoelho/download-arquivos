@@ -5,25 +5,33 @@ from datetime import datetime
 
 
 def cabecalho() -> dict:
-    versao_motorola = (
+    modelo_motorola = (
+        "C",
+        "E",
+        "G",
+        "X",
+        "Z",
+        "One",
+        "Vision"
+    )
+
+    modelo_xiaomi = (
+        "6",
+        "7",
+        "8A",
+        "8 SE",
+        "8T Pro",
+        "9",
+        "9 Pro",
+        "A3",
+        "S2"
+    )
+
+    modelo_smartphone = (
         [
-            "moto C",
-            "moto E",
-            "moto G",
-            "moto X",
-            "moto Z",
-            "moto One",
-            "moto Vision",
-            "Mi 9 SE",
-            "Mi 9T Pro",
-            "Mi 8",
-            "Mi 8 Pro",
-            "Mi A3",
-            "Redmi 8",
-            "Redmi 7",
-            "Redmi 6",
-            "Redmi 8A",
-            "Redmi S2"
+            f"moto {choice(modelo_motorola)}",
+            f"Mi {choice(modelo_xiaomi)}",
+            f"Redmi {choice(modelo_xiaomi)}"
         ]
     )
 
@@ -37,7 +45,7 @@ def cabecalho() -> dict:
         ]
     )
 
-    versao_linux = (
+    distribuicao_linux = (
         [
             "Ubuntu",
             "Pop-os",
@@ -48,26 +56,17 @@ def cabecalho() -> dict:
     )
 
     accept = (
-        [
-            (
-                "text/html,"
-                "application/xhtml+xml,"
-                f"application/xml;q=0.{randint(5,9)},"
-                f"image/webp,*/*;q=0.{randint(4,8)}"
-            ),
-            (
-                "text/html,"
-                f"application/xhtml+xml.{randint(5,9)},"
-                f"application/xml.{randint(4,8)}"
-            )
-        ]
+        "text/html,"
+        "application/xhtml+xml,"
+        f"application/xml;q=0.{randint(2,8)},"
+        f"image/webp,image/apng,*/*;q=0.{randint(3,9)}"
     )
 
     user_agent = (
         [
             (
                 f"Mozilla/5.0 (Linux; Android {randint(8,13)}; "
-                f"{choice(versao_motorola)}) "
+                f"{choice(modelo_smartphone)}) "
                 f"AppleWebKit/{randint(512,555)}.36 (KHTML, like Gecko) "
                 f"Chrome/{randint(70,105)}.0.{randint(1,5500)}.66 "
                 f"Mobile Safari/{randint(512,555)}.36"
@@ -79,7 +78,7 @@ def cabecalho() -> dict:
                 f".{randint(1,5500)}.128 Safari/{randint(512,555)}.36"
             ),
             (
-                f"Mozilla/5.0 ({choice(versao_linux)}; "
+                f"Mozilla/5.0 ({choice(distribuicao_linux)}; "
                 f"Linux x86_64; rv:{randint(60,90)}.0) "
                 f"Gecko/{randint(2015, int(datetime.now().strftime('%Y')))}"
                 f"0101 Firefox/{randint(60,90)}.0"
@@ -98,12 +97,18 @@ def cabecalho() -> dict:
         ]
     )
 
-    accept_language = ["en-US,en;q=0.5", "pt-BR,pt;q=0.3"]
+    accept_language = (
+        [
+            f"en-US,en;q=0.{randint(3,9)}",
+            f"pt-PT,pt;q=0.{randint(3,9)}"
+            f"pt-BR,pt;q=0.{randint(3,9)}"
+        ]
+    )
 
     return (
         {
             "User-Agent": choice(user_agent),
-            "Accept": choice(accept),
+            "Accept": accept,
             "Connection": "Keep-alive",
             "Accept-encoding": "gzip, deflate",
             "Accept-language": choice(accept_language)
