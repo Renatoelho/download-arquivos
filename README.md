@@ -1,7 +1,7 @@
 
 # Baixando arquivos existentes em páginas WEB
 
-Este projeto irá ajudá-lo a baixar arquivos existentes em páginas da web. Isso é útil quando há vários arquivos em uma única página e você precisa de todos eles. Seguindo os passos abaixo, a implantação é rápida e uma pasta chamada "Download" centraliza todos os arquivos existentes em uma determinada URL, organizando-os por domínio.
+Este projeto irá ajudá-lo a baixar arquivos existentes em páginas da web. Isso é útil quando há vários arquivos em uma única página e você precisa de todos eles. Seguindo os passos abaixo, a implantação é rápida e uma pasta chamada ```Download``` centraliza todos os arquivos existentes em uma determinada URL, organizando-os por domínio.
 
 
 # Requisitos
@@ -13,7 +13,7 @@ Este projeto irá ajudá-lo a baixar arquivos existentes em páginas da web. Iss
 + ![Ubuntu](https://img.shields.io/badge/Ubuntu-20.04-E3E3E3)
 
 
-# Implatação
+# Implantação
 
 ### Clonando o repositório do projeto
 
@@ -54,8 +54,6 @@ pip install -r requiment.txt
 
 
 ### Baixando arquivos
-
-Em app.py altere a variável 'url_pagina' pela URl que você quer baixar os arquivos e no método 'captura_links_arquivos_pagina' passe no parâmetro 'extensoes' passe uma lista das extensões que vc quer baixar.
 
 No arquivo ```app.py```, altere a variável ```url_pagina``` para a URL da página da qual você deseja baixar os arquivos. No método ```captura_links_arquivos_pagina```, passe uma lista das extensões que você deseja baixar como parâmetro ```extensoes```.
 
