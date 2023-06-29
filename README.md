@@ -15,13 +15,13 @@ Este projeto irá ajudá-lo a baixar arquivos existentes em páginas da web. Iss
 
 # Implatação
 
-## Clonando o repositório do projeto
+### Clonando o repositório do projeto
 
 ```bash
 git clone https://github.com/Renatoelho/download-arquivos.git download-arquivos
 ```
 
-## Adicionando PYTHONPATH
+### Adicionando PYTHONPATH
 
 Adicione as variáveis de ambiente o ```PYTHONPATH``` ao seu contexto de desenvolvimento. Isso pode ser feito diretamente no terminal onde você irá executar a aplicação ou no arquivo ```.bashrc``` para torná-lo permanente.
 
@@ -34,7 +34,7 @@ cd download-arquivos/
 export PYTHONPATH=$PWD/utils
 ```
 
-## Criando e configurando ambiente python
+### Criando e configurando ambiente python
 
 ```bash
 python3 -m venv .venv
@@ -53,7 +53,7 @@ pip install -r requiment.txt
 ```
 
 
-# Baixando arquivos
+### Baixando arquivos
 
 Em app.py altere a variável 'url_pagina' pela URl que você quer baixar os arquivos e no método 'captura_links_arquivos_pagina' passe no parâmetro 'extensoes' passe uma lista das extensões que vc quer baixar.
 
