@@ -49,7 +49,7 @@ pip install -U pip setuptools wheel
 ```
 
 ```bash
-pip install -r requiment.txt
+pip install -r requirements.txt
 ```
 
 
@@ -63,11 +63,11 @@ No arquivo ```app.py```, altere a variável ```url_pagina``` para a URL da pági
 python3 app.py
 ```
 
-> ***Aviso***: Algumas páginas da web protegem seus links utilizando recursos do JavaScript, portanto, alguns arquivos podem não ser baixados.
+> ***Aviso***: Algumas páginas da web protegem seus links utilizando recursos do JavaScript, portanto, alguns arquivos podem não ser baixados nessa versão da aplicação.
 
 
 # Referências
 
-Beautiful Soup Documentation, ***Beautiful Soup***. Disponível em: <https://beautiful-soup-4.readthedocs.io/en/latest/>. Acesso em: 26 de jun. 2023.
+Beautiful Soup Documentation, ***Beautiful Soup***. Disponível em: [\<https://beautiful-soup-4.readthedocs.io/en/latest/\>](https://beautiful-soup-4.readthedocs.io/en/latest/). Acesso em: 26 de jun. 2023.
 
-Requests: HTTP for Humans, ***Requests***. Disponível em: <https://requests.readthedocs.io/en/latest/>. Acesso em: 26 de jun. 2023.
+Requests: HTTP for Humans, ***Requests***. Disponível em: [\<https://requests.readthedocs.io/en/latest/\>](https://requests.readthedocs.io/en/latest/). Acesso em: 26 de jun. 2023.
