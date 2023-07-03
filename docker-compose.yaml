@@ -1,0 +1,32 @@
+version: "3.3"
+
+services:
+  download-server:
+    build: 
+      dockerfile: ./download/dockerfile
+      context: .
+    hostname: download-server
+    image: imagem-base-download-server:0.0.1
+    container_name: download-server
+    ports:
+      - "8888:8888"
+    environment:
+      - PYTHON_ENV=/home/user01/app/.env
+      - PYTHONPATH=/home/user01/app/utils:/home/user01/app/testes
+      - TZ=America/Sao_Paulo
+    deploy:
+      resources:
+        limits:
+          memory: 2GB
+    restart: always
+    #healthcheck:
+    #  test: curl -f http://???????:8888/healthcheck || exit 1
+    #  interval: 15s
+    #  timeout: 10s
+    #  retries: 5
+    networks:
+      - rede-download
+ 
+networks:
+  rede-download:
+    driver: bridge

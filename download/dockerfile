@@ -1,0 +1,68 @@
+# Imagem de origem
+FROM ubuntu:20.04
+
+# Define o bash padrão para execução dos comandos
+SHELL ["/bin/bash", "-c"]
+
+# Cria o usuário, senha e diretório para aplicação
+RUN useradd -ms /bin/bash user01 -G sudo && \
+  passwd -d  user01 && \
+  mkdir -p /home/user01/app 
+
+# Seleciona a pasta para ser utilizada nos comandos seguintes
+WORKDIR /home/user01
+
+# Atualiza o repositório APT, Instala o Python3.8, VENV, Nano, systemctl e etc...
+RUN apt update && \
+  apt install python3.8 \
+  python3.8-venv \
+  systemctl \
+  curl \
+  nano \
+  tar \
+  zip \
+  unzip \
+  tzdata \
+  sudo -y 
+
+# Cria o link apontando para o Python3.8 e adiciona ao .bashrc o interpretador do Python3
+RUN ln -sf /usr/bin/python3.8 /usr/bin/python3 && \
+  echo "export PATH=$PATH:/usr/bin/python3" >> \
+  /home/user01/.bashrc && \
+  source /home/user01/.bashrc
+
+# Seleciona a pasta para ser utilizada nos comandos seguintes
+WORKDIR /home/user01/app
+
+# Atribuindo permissões para o usuário do diretório da aplicação
+RUN chown -R user01:user01 /home/user01/app 
+
+# Cópia dos arquivos da aplicação
+COPY download/app/ .
+
+# Copiando arquivo geckodriver
+COPY download/deploy/geckodriver-v0.33.0-linux64.tar.gz .
+
+# Descompactação do arquivo
+RUN tar -xvzf geckodriver-v0.33.0-linux64.tar.gz
+
+# Movendo o arquivo geckodriver para o diretório correto
+RUN mv geckodriver /usr/local/bin/
+
+# Definindo permissões de execução para o geckodriver
+RUN chmod +x /usr/local/bin/geckodriver
+
+# Atribui o usuário da Aplicação para os comandos seguintes
+USER user01
+
+# Configurando o Python para aplicação
+RUN python3 -m venv /home/user01/.virtualenvs && \
+  source /home/user01/.virtualenvs/bin/activate && \
+  pip install -U pip setuptools wheel && \
+  pip install -r requirements.txt
+
+# porta de acesso a aplicação
+EXPOSE 8888 
+
+# Start da aplicação no servidor
+ENTRYPOINT ["tail", "-f", "/dev/null"]

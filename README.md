@@ -13,6 +13,22 @@ Este projeto irá ajudá-lo a baixar arquivos existentes em páginas da web. Iss
 + ![Ubuntu](https://img.shields.io/badge/Ubuntu-20.04-E3E3E3)
 
 
+
+# Build Docker-compose
+
+- UP
+
+```bash
+docker-compose -f docker-compose.yaml --compatibility up -d --build
+```
+
+- DOWN
+
+```bash
+docker-compose -f docker-compose.yaml --compatibility down
+```
+
+
 # Implantação
 
 ### Clonando o repositório do projeto
