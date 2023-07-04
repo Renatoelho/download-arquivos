@@ -1,6 +1,9 @@
 # Imagem de origem
 FROM ubuntu:20.04
 
+# Argumento para evitar interação
+ARG DEBIAN_FRONTEND=noninteractive
+
 # Define o bash padrão para execução dos comandos
 SHELL ["/bin/bash", "-c"]
 
@@ -16,6 +19,13 @@ WORKDIR /home/user01
 RUN apt update && \
   apt install python3.8 \
   python3.8-venv \
+  gir1.2-gtk-3.0 \
+  dconf-service \
+  dconf-gsettings-backend \
+  libgtk-3-common \
+  libgtk-3-0 \
+  libgtk-3-dev \
+  firefox \
   systemctl \
   curl \
   nano \
@@ -39,18 +49,6 @@ RUN chown -R user01:user01 /home/user01/app
 
 # Cópia dos arquivos da aplicação
 COPY download/app/ .
-
-# Copiando arquivo geckodriver
-COPY download/deploy/geckodriver-v0.33.0-linux64.tar.gz .
-
-# Descompactação do arquivo
-RUN tar -xvzf geckodriver-v0.33.0-linux64.tar.gz
-
-# Movendo o arquivo geckodriver para o diretório correto
-RUN mv geckodriver /usr/local/bin/
-
-# Definindo permissões de execução para o geckodriver
-RUN chmod +x /usr/local/bin/geckodriver
 
 # Atribui o usuário da Aplicação para os comandos seguintes
 USER user01

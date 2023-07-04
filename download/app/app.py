@@ -1,23 +1,23 @@
 
-from utils.captura_links_pagina import captura_links_arquivos_pagina
-from utils.baixa_arquivos_pagina import baixa_arquivos_pagina
+from selenium import webdriver
+from selenium.webdriver.firefox.options import Options
+from selenium.webdriver.firefox.service import Service
+from bs4 import BeautifulSoup 
 
+firefox_options = Options()
+firefox_options.add_argument("--headless")
 
-url_pagina = "https://www.gov.br/ans/pt-br/acesso-a-informacao/perfil-do-setor/dados-abertos-1/dados-abertos"
+driver = webdriver.Firefox(options=firefox_options) 
+driver.get("https://dados.gov.br/dados/conjuntos-dados/cadastro-nacional-da-pessoa-juridica---cnpj")
 
-if __name__ == "__main__":
-    arquivos_pagina = (
-        captura_links_arquivos_pagina(url_pagina, extensoes=[".pdf"])
-    )
+botoes = driver.find_elements("xpath", "//*[@id='btnDownloadUrl']")
+print(botoes)
+urls = [] 
+for index, botao in enumerate(botoes):
+    url = botao.is_displayed()
+    print(f"URL de número: {index + 1} - {url}")
+    urls.append(url) 
+    print(url) 
 
-    if arquivos_pagina["status"]:
-        for index, url_arquivo in enumerate(arquivos_pagina["arquivos"]):
-            download = baixa_arquivos_pagina(url_arquivo)
-
-            if download["status"]:
-                print(f"{index + 1}º Arquivo baixado com sucesso!!!")
-            else:
-                print(f"{index + 1}º Arquivo não foi baixado...")
-                print(download)
-    else:
-        print(arquivos_pagina)
+html = driver.page_source 
+driver.quit() 
